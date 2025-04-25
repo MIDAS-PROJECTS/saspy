@@ -1,7 +1,7 @@
 import sasConnection.sasCon as sasCon
 import time
 
-port = ""
+port = "/dev/ttyACM0"
 address = 1
 
 machineID = [
