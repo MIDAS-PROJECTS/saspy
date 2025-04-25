@@ -17,12 +17,15 @@ class SasConnection():
     
     def connect(self):
         try:
+            print("Init serial connection...")
             self.connection = serial.Serial(port = self.port,
                                                 baudrate = 19200,
                                                 timeout = 2)
         except serial.SerialException as e:
+            print("Connection error")
             raise e
         except Exception as e:
+            print("Connection error")
             raise e
     
 

@@ -25,6 +25,7 @@ game_meters = [
 
 
 sasConnection = sasCon.SasConnection(port, address)
+sasConnection.connect()
 sasConnection.start()
 
 for k in machineID:
