@@ -233,7 +233,7 @@ class sas(object):
                 print 'Connecting SAS...'
                 while True:
                         response =self.connection.read(1)
-                        if (response<>''):
+                        if (response != ''):
                                 self.adress=int(binascii.hexlify(response))
                                 if self.adress>=1:
                                         print 'adress recognised '+str(self.adress)
