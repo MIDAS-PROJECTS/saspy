@@ -1,7 +1,7 @@
 import sasConnection.sasCon as sasCon
 import time
 
-port = "/dev/ttyACM0"
+port = "/dev/ttyUSB0"
 address = 1
 
 machineID = [
@@ -28,14 +28,26 @@ sasConnection = sasCon.SasConnection(port, address)
 sasConnection.connect()
 sasConnection.start()
 
+
+while True:
+    #print(f"input buffer: {sasConnection.connection.in_waiting}")
+    #print(f"output buffer {sasConnection.connection.out_waiting}")
+
+    #if (sasConnection.connection.in_waiting == 4095):
+        
+        #print("it was true")
+    print(bytearray(sasConnection.connection.read(sasConnection.connection.in_waiting)))
+    #print(sasConnection.connection.read(sasConnection.connection.in_waiting))
+    time.sleep(.1)
+
 for k in machineID:
     print(f"{k}\t {sasConnection.meters[k]}")
 
-while True:
-    sasConnection.meters_11_15()
-    for meter in game_meters:
-        print(f"{k}\t {sasConnection.meters[k]}")
-    time.sleep(1000)
+#while True:
+#    sasConnection.meters_11_15()
+#    for meter in game_meters:
+#        print(f"{meter}\t {sasConnection.meters[meter]}")
+#    time.sleep(1000)
 
 
 
