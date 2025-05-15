@@ -1,53 +1,51 @@
-import sasConnection.sasCon as sasCon
-import time
+#from sasConnection import SasConnection
+import argparse
+import tkinter as tk
+from gui.gui_interface import MainFrame
 
-port = "/dev/ttyUSB0"
-address = 1
+def run_gui():
+    root = tk.Tk()
+    root.title("SAS Connection")
+    root.protocol("WM_DELETE_WINDOW", lambda: root.quit())
+    #root.resizable(False,False)
+    app = MainFrame(root)
+    root.focus_force()
+    root.mainloop()
 
-machineID = [
-    'ASCII_game_ID',
-    'ASCII_additional_ID',
-    'bin_denomination',
-    'bin_max_bet',
-    'bin_progressive_mode',
-    'bin_game_options',
-    'ASCII_paytable_ID',
-    'ASCII_base_percentage'
-]
+def main():
+    parser = argparse.ArgumentParser(
+        prog = "SAS connection host parser Implementation",
+        description = "Python script that sends and receives messages from a gaming machines",
+        epilog = "this stuff is still under construction so xd"
+    )
 
-game_meters = [
-    'total_bet_meter',
-    'total_win_meter',
-    'total_in_meter',
-    'total_jackpot_meter',
-    'games_played_meter'
-]
+    subparsers = parser.add_subparsers(dest="mode", help = "Execution mode")
 
+    ##CONFIG FILE:
+    config_parser = subparsers.add_parser("configfiles", help = "Run using a configuration file")
+    config_parser.add_argument("file", type=str, help = "Path to JSON configuration file")
 
-sasConnection = sasCon.SasConnection(port, address)
-sasConnection.connect()
-sasConnection.start()
+    #CLI flags mode
+    flags_parser = subparsers.add_parser("cli", help = "Run using command-line arguments")
+    flags_parser.add_argument("--port", type=str, required = True, help = "Port name for serial connection")
+    flags_parser.add_argument("--address", type=int, required = True, help = "Gaming machine SAS address")
+    
+    #GUI mode
+    gui_parser = subparsers.add_parser("gui", help = "Run in GUI mode")
 
+    args = parser.parse_args()
 
-while True:
-    #print(f"input buffer: {sasConnection.connection.in_waiting}")
-    #print(f"output buffer {sasConnection.connection.out_waiting}")
-
-    #if (sasConnection.connection.in_waiting == 4095):
-        
-        #print("it was true")
-    print(bytearray(sasConnection.connection.read(sasConnection.connection.in_waiting)))
-    #print(sasConnection.connection.read(sasConnection.connection.in_waiting))
-    time.sleep(.1)
-
-for k in machineID:
-    print(f"{k}\t {sasConnection.meters[k]}")
-
-#while True:
-#    sasConnection.meters_11_15()
-#    for meter in game_meters:
-#        print(f"{meter}\t {sasConnection.meters[meter]}")
-#    time.sleep(1000)
+    if args.mode is None or args.mode == "gui":
+        print("start in GUI mode")
+        run_gui()
+    elif args.mode == "configfile":
+        print("start in configFile mode")
+    elif args.mode == "cli":
+        print("start in cli mode")
+    else:
+        parser.print_help()
 
 
+if __name__ == "__main__":
+    main()
 
