@@ -49,7 +49,7 @@ class EventThread(threading.Thread):
         except ValueError as ve:
                 self.exceptionLogFunc(f"${input} - Unknown exception code read")
     
-    def stopExcecution():
+    def stopExcecution(self):
         self.Cont = False
     
 

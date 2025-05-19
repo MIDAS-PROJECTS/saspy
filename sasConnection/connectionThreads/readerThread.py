@@ -15,7 +15,7 @@ class ReaderThread(threading.Thread):
         self.readDelay = readDelay
         
     def run(self):
-        while self.connection.connection.is_open:
+        while self.connection.is_open:
             self.readBuffer.append(self.connection.read(self.connection.in_waiting))
             time.sleep(self.readDelay)
     

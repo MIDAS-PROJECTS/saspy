@@ -21,7 +21,7 @@ class SasConnection():
     
     def connect(self):
         try:
-            print("Init serial connection...")
+            print(f"Initializing serial connection with port {self.port} and EGM SAS address {self.address}...")
             self.connection = serial.Serial(
                 port = self.port,
                 baudrate = 19200, #look how to change this to a constant in serial
@@ -48,9 +48,9 @@ class SasConnection():
 
     def __createThreads(self):
         self.__eventThread = EventThread(self.__readBuffer,
-            self.__commandBuffer,
             self.__exceptionLogFunc,
-            self.__commandLogFunc
+            self.__commandLogFunc,
+            self.__commandBuffer
         )
         self.__gpSyncThread = GeneralAndSyncPoolsThread(self.connection)
         self.__readerThread = ReaderThread(self.connection, self.__readBuffer)

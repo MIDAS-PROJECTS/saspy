@@ -16,13 +16,16 @@ class GeneralAndSyncPoolsThread(threading.Thread):
     
     def run(self):
         while self.connection.is_open:
-            if self.activated:
-                self.connection.write(b'\x80') # Sync
-                time.sleep(self.poolDelay)
-                self.connection.write(b'\x81') # General Pool
-                time.sleep(self.poolDelay)
-            else:
-                time.sleep(self.poolDelay * 5)
+            try:
+                if self.activated:
+                    self.connection.write(b'\x80') # Sync
+                    time.sleep(self.poolDelay)
+                    self.connection.write(b'\x81') # General Pool
+                    time.sleep(self.poolDelay)
+                else:
+                    time.sleep(self.poolDelay * 5)
+            except serial.serialutil.PortNotOpenError as e:
+                print("Synch exception - closing gp thread")
     
     def setDelay(newPoolDelay: float):
         self.poolDelay = newPoolDelay

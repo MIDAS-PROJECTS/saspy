@@ -54,14 +54,13 @@ class MainFrame(tk.Frame):
     def __on_start(self):
         selected_port = self.port_var.get()
         selected_addr = self.addr_var.get()
-        print(f"Selected port: {selected_port}\nSelected address: {selected_addr}")
-        #self.__sasConnection = SasConnection(
-        #    port = selected_port,
-        #    address = selected_addr,
-        #    exceptionLogFunc = lambda input: self.__log_to_widget(self.exception_area, input),
-        #    commandLogFunc = lambda input: self.__log_to_widget(self.command_area, input),
-        #)
-        #self.__sasConnection.connect()
+        self.__sasConnection = SasConnection(
+            port = selected_port,
+            address = selected_addr,
+            exceptionLogFunc = lambda input: self.__log_to_widget(self.exception_area, input),
+            commandLogFunc = lambda input: self.__log_to_widget(self.command_area, input),
+        )
+        self.__sasConnection.connect()
 
         self.start_btn.config(state="disabled")
         self.stop_btn.config(state = "normal")
