@@ -29,16 +29,17 @@ class EventThread(threading.Thread):
     
     def analyzeFullInput(self, fullInput: bytes):
         #TODO: should use commandBuffer to know if a command is pending to be read
-        separatedInput = fullInput.split(b'\x01') #The parameter of split should be the direction I guess
-        for input in separatedInput:
-            self.analyzeInput(input)
+        #separatedInput = fullInput.split(b'\x01') #The parameter of split should be the direction I guess
+        #for input in separatedInput:
+        self.analyzeInput(fullInput)
     
     def analyzeInput(self, input:bytes):
         if len(input) == 1:
             self.handleGeneralException(input)
         elif len(input) > 1:
             #TODO: manejo de respuestas de longitudes mas grandes
-            self.commandLogFunc("respuesta de muchos ACKS o a un comando")
+            #self.commandLogFunc("respuesta de muchos ACKS o a un comando")
+            self.commandLogFunc(f"{input}")
     
 
     def handleGeneralException(self, input: bytes):

@@ -21,6 +21,7 @@ class MainFrame(tk.Frame):
         self.__setup_address_selector()
         self.__setup_buttons()
         self.__setup_message_areas()
+        self.__setup_flush_buttons()
     
     def __setup_label(self):
         label = tk.Label(self, text = "Select SAS Connection configuration", anchor=tk.NW, font=("ARIAL",16))
@@ -50,6 +51,19 @@ class MainFrame(tk.Frame):
 
         self.stop_btn = tk.Button(frm, text = "Stop", command = self.__on_stop, state="disabled")
         self.stop_btn.pack(padx=10, side = tk.LEFT)
+    
+    def __setup_flush_buttons(self):
+        frm = tk.Frame(master = self, relief = tk.RAISED)
+        frm.pack(pady=5)
+
+        flushException = tk.Button(frm, text = "flush exceptions", command = lambda : self.__flush_to_widget(self.exception_area))
+        flushException.pack(padx=10, side = tk.LEFT)
+
+        flushLongPolls = tk.Button(frm, text = "flush commands", command = lambda : self.__flush_to_widget(self.command_area))
+        flushLongPolls.pack(padx=10, side = tk.LEFT)
+
+        sendMeters = tk.Button(frm, text = "ask for meters", command = lambda : self.__sasConnection.send_meters_10_15())
+        sendMeters.pack(padx = 10, side = tk.LEFT)
     
     def __on_start(self):
         selected_port = self.port_var.get()
@@ -91,4 +105,10 @@ class MainFrame(tk.Frame):
         widget.see(tk.END)
         widget.config(state="disabled")
     
+    def __flush_to_widget(self, widget):
+        widget.config(state = "normal")
+        widget.delete(1.0, tk.END)
+        widget.config(state="disabled")
+    
+
 

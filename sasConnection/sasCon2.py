@@ -25,7 +25,7 @@ class SasConnection():
             self.connection = serial.Serial(
                 port = self.port,
                 baudrate = 19200, #look how to change this to a constant in serial
-                timeout = 2)
+                timeout = 4)
             self.__createThreads()
             self.__startThreads()
             
@@ -52,7 +52,7 @@ class SasConnection():
             self.__commandLogFunc,
             self.__commandBuffer
         )
-        self.__gpSyncThread = GeneralAndSyncPoolsThread(self.connection)
+        self.__gpSyncThread = GeneralAndSyncPoolsThread(self.connection, self.__commandBuffer)
         self.__readerThread = ReaderThread(self.connection, self.__readBuffer)
     
     def __startThreads(self):
@@ -69,5 +69,16 @@ class SasConnection():
         self.__eventThread.stopExcecution()
         self.connection.close()
         self.__joinThreads()
+    
+    def __sendCommand(self, command: bytes, no_response:bool = False, crc_need:bool = False):
+        if self.connection.is_open:
+            serialSend = b'\x81' + command
+            print(f"sending {serialSend}")
+            self.__commandBuffer.append(serialSend)
+            #self.connection.write(serialSend)
+    
+    def send_meters_10_15(self):
+        #0F
+        self.__sendCommand(b'\x0F')
 
 
